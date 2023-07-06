@@ -29,7 +29,7 @@ public class HttpParser {
         String line;
         HashMap<String, String> headers = new HashMap<>();
 
-        while((line = reader.readLine()) != "\r\n"){
+        while(!(line = reader.readLine()).equals("\r\n")){
             headers.put(line.split(": ")[0], line.split(": ")[1]);
         }
 

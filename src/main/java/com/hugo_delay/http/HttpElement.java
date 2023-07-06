@@ -23,4 +23,17 @@ public class HttpElement {
     public void addHeader(String key, String value){
         headers.put(key, value);
     }
+
+    protected String getHeaderAsString(){
+        StringBuilder headerString = new StringBuilder();
+
+        for(String key: headers.keySet()){
+            headerString.append(key);
+            headerString.append(": ");
+            headerString.append(headers.get(key));
+            headerString.append("\r\n");
+        }
+
+        return headerString.toString();
+    }
 }
