@@ -1,15 +1,16 @@
 package com.hugo_delay.http;
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 
 public class HttpElement {
-    protected HashMap<String, String> headers;
+    protected LinkedHashMap<String, String> headers;
     protected String body;
 
-    public HashMap<String, String> getHeaders() {
+    public LinkedHashMap<String, String> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(HashMap<String, String> headers) {
+    public void setHeaders(LinkedHashMap<String, String> headers) {
         this.headers = headers;
     }
 
@@ -24,7 +25,10 @@ public class HttpElement {
         headers.put(key, value);
     }
 
-    protected String getHeaderAsString(){
+    public HttpElement(){
+        this.headers = new LinkedHashMap<>();
+    }
+    public String getHeaderAsString(){
         StringBuilder headerString = new StringBuilder();
 
         for(String key: headers.keySet()){

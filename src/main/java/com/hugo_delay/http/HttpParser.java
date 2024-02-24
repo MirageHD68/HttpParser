@@ -2,13 +2,13 @@ package com.hugo_delay.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class HttpParser {
 
     public static HttpResponse parseAnswer(BufferedReader reader) throws IOException {
         String firstLine = reader.readLine();
-        HttpResponse answer = new HttpResponse(Integer.parseInt(firstLine.split(" ")[1]), firstLine.split(" ")[2]);
+        HttpResponse answer = new HttpResponse(Integer.parseInt(firstLine.split(" ")[1]), firstLine.split(" ",3)[2]);
 
         answer.setHeaders(parseHeader(reader));
         answer.setBody(parseBody(reader));
@@ -25,12 +25,22 @@ public class HttpParser {
         return request;
     }
 
-    private static HashMap<String, String> parseHeader(BufferedReader reader) throws IOException {
+    private static LinkedHashMap<String, String> parseHeader(BufferedReader reader) throws IOException {
         String line;
-        HashMap<String, String> headers = new HashMap<>();
+        LinkedHashMap<String, String> headers = new LinkedHashMap<>();
+        boolean loopingCondition = true;
 
-        while(!(line = reader.readLine()).equals("\r\n")){
-            headers.put(line.split(": ")[0], line.split(": ")[1]);
+        while(loopingCondition){
+            line = reader.readLine();
+            if(line == null){
+                loopingCondition = false;
+            } else {
+                if((line).equals("\r\n")){
+                    loopingCondition = false;
+                } else {
+                    headers.put(line.split(": ")[0], line.split(": ")[1]);
+                }
+            }
         }
 
         return headers;
@@ -44,6 +54,6 @@ public class HttpParser {
             body.append(line);
         }
 
-        return body.toString();
+        return body.isEmpty() ? null : body.toString();
     }
 }
